@@ -18,3 +18,12 @@ class Book(db.Model, SerializerMixin):
     author = db.Column(db.String)
     genre = db.Column(db.String)
     pages = db.Column(db.Integer)
+
+class ReadingLog(db.Model, SerializerMixin):
+    __tablename__ = 'reading_logs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
+    start_data = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
