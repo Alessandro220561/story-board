@@ -17,10 +17,18 @@ from models import User, Book
 def index():
     return '<h1>Project Server</h1>'
 
-def Users(Resource):
+class Users(Resource):
     def get(self):
         users = [user.to_dict() for user in User.query.all()]
         return make_response(jsonify(users), 200)
+    
+class Books(Resource):
+    def get(self):
+        books = [book.to_dict() for book in Book.query.all()]
+        return make_response(jsonify(books), 200)
+    
+api.add_resource(Users, '/users')
+api.add_resource(Books, "/books")
 
 
 if __name__ == '__main__':
