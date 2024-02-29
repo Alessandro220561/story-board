@@ -25,5 +25,5 @@ class ReadingLog(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
-    start_data = db.Column(db.DateTime)
+    start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
