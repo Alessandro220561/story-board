@@ -9,7 +9,7 @@ from flask_restful import Resource
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Book
+from models import User, Book, ReadingLog
 
 # Views go here!
 
@@ -27,8 +27,14 @@ class Books(Resource):
         books = [book.to_dict() for book in Book.query.all()]
         return make_response(jsonify(books), 200)
     
+class ReadingLogs(Resource):
+    def get(self):
+        reading_logs = [logs.to_dict() for logs in ReadingLog.query.all()]
+        return make_response(jsonify(reading_logs), 200)
+    
 api.add_resource(Users, '/users')
 api.add_resource(Books, "/books")
+api.add_resource(ReadingLogs, "/reading_logs")
 
 
 if __name__ == '__main__':

@@ -4,10 +4,12 @@ import { Switch, Route } from "react-router-dom";
 function App() {
   const [users, setUsers] = useState([]);
   const [books, setBooks] = useState([]);
+  const [readingLogs, setReadingLogs] = useState([]);
 
   useEffect(() => {
     getUsers();
     getBooks();
+    getReadingLogs();
   }, []);
 
   const getUsers = () => {
@@ -20,6 +22,12 @@ function App() {
     fetch("/books")
       .then((r) => r.json())
       .then((bookData) => setBooks(bookData));
+  };
+
+  const getReadingLogs = () => {
+    fetch("/reading_logs")
+      .then((r) => r.json())
+      .then((readingLogData) => setReadingLogs(readingLogData));
   };
 
   return (
@@ -43,6 +51,20 @@ function App() {
               </ul>
             </li>
           ))}
+          <h1>Reading Logs</h1>
+          <ul>
+            {readingLogs.map((log) => (
+              <li key={log.id}>
+                <h4>Reading Logs</h4>
+                <ul>
+                  <li>{log.user_id}</li>
+                  <li>{log.book_id}</li>
+                  <li>{log.start_date}</li>
+                  <li>{log.end_date}</li>
+                </ul>
+              </li>
+            ))}
+          </ul>
         </ul>
       </ul>
     </div>
