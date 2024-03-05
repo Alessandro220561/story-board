@@ -10,6 +10,8 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String(50))
     email = db.Column(db.String)
 
+    reading_logs = db.relationship("ReadingLog", back_populates="user")
+
 class Book(db.Model, SerializerMixin):
     __tablename__ = 'books'
 
@@ -19,6 +21,8 @@ class Book(db.Model, SerializerMixin):
     genre = db.Column(db.String)
     pages = db.Column(db.Integer)
 
+    reading_logs = db.relationship("ReadingLog", back_populates="book")
+
 class ReadingLog(db.Model, SerializerMixin):
     __tablename__ = 'reading_logs'
 
@@ -27,3 +31,15 @@ class ReadingLog(db.Model, SerializerMixin):
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
+
+    user = db.relationship("User", back_populates="reading_logs")
+
+    book = db.relationship("Book", back_populates="reading_logs")
+
+# class UserLog(db.Model, SerializerMixin):
+#     __tablename__ = 'user_logs'
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     reading_log_id = db.Column(db.Integer, db.ForeignKey('reading_logs.id'))
+#     favorite = db.Column(db.Boolean)
