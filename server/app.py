@@ -17,25 +17,15 @@ from models import User, Book, ReadingLog
 def index():
     return '<h1>Project Server</h1>'
 
-class Users(Resource):
+class Auth(Resource):
     def get(self):
-        users = [user.to_dict() for user in User.query.all()]
-        return make_response(jsonify(users), 200)
-    
-class Books(Resource):
-    def get(self):
-        books = [book.to_dict() for book in Book.query.all()]
-        return make_response(jsonify(books), 200)
-    
-class ReadingLogs(Resource):
-    def get(self):
-        reading_logs = [logs.to_dict() for logs in ReadingLog.query.all()]
-        return make_response(jsonify(reading_logs), 200)
-    
-api.add_resource(Users, '/users')
-api.add_resource(Books, "/books")
-api.add_resource(ReadingLogs, "/reading_logs")
+        try:
+            user = User.query.filter_by(id=session['user_id']).first()
+            return make_response(user.to_dict(), 200)
+        except:
+            return('Unauthorized', 401)
 
+api.add_resource(Auth, '/auth')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
