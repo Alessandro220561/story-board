@@ -27,6 +27,24 @@ class Auth(Resource):
 
 api.add_resource(Auth, '/auth')
 
+class Signup(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+            user = User(username=data['username'], email=data['email'])
+            user.password_hash = data['password']
+
+            db.session.add(user)
+            db.session.commit()
+
+            session['user_id'] = user.id
+
+            return make_response(user.to_dict(), 201)
+        except:
+            return ('Error in signing up', 422)
+        
+api.add_resource(Signup, '/signup')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
