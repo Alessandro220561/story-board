@@ -4,21 +4,28 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import Authorization from "./AuthorizationPage";
 import SignUpForm from "./SignUpForm";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [user, setUser] = useState({});
+  const history = useHistory();
+  const dispatch = useDispatch();
+  // const [user, setUser] = useState({});
+  const user = useSelector((state) => state.user.value);
 
-  // useEffect(() => {
-  //   getUser();
-  // }, []);
+  useEffect(() => {
+    getUser();
+  }, []);
 
-  // const getUser = () => {
-  //   fetch("/auth")
-  //     .then((r) => r.json())
-  //     .then((userData) => setUser(userData));
-  // };
+  const getUser = () => {
+    fetch("/auth")
+      .then((r) => r.json())
+      .then((userObj) => dispatch(setUser(userObj)));
+  };
 
-  if (Object.keys(user).length === 0)
+  if (!user)
     return (
       <>
         <Header>Welcome to Story Board</Header>
@@ -26,6 +33,11 @@ function App() {
         <Authorization />
       </>
     );
+
+  const newUser = (newUserData) => {
+    setUser([...user, newUserData]);
+    history.push("/login");
+  };
 
   return (
     <>
@@ -39,7 +51,7 @@ function App() {
             <Authorization />
           </Route>
           <Route path="/signup">
-            <SignUpForm setUser={setUser} />
+            <SignUpForm newUser={newUser} />
           </Route>
         </Switch>
       </Router>

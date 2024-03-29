@@ -4,10 +4,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useHistory } from "react-router-dom";
 
-const SignUpForm = ({ setUser }) => {
-  const history = useHistory();
-  const [errors, setErrors] = useState([]);
-
+const SignUpForm = ({ newUser }) => {
   const formSchema = yup.object().shape({
     username: yup.string().required(),
     email: yup.string().email().required(),
@@ -33,7 +30,9 @@ const SignUpForm = ({ setUser }) => {
         body: JSON.stringify(values),
       })
         .then((r) => r.json())
-        .then((userData) => setUser(userData));
+        .then((userData) => {
+          newUser(userData);
+        });
     },
   });
 
@@ -51,7 +50,7 @@ const SignUpForm = ({ setUser }) => {
         type="text"
         name="email"
         value={formik.values.email}
-        onChane={formik.handleChange}
+        onChange={formik.handleChange}
       />
       <label>Password</label>
       <input
